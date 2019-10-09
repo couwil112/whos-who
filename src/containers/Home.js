@@ -116,17 +116,15 @@ Home.propTypes = {
 
 const mapStateToProps = state => ({
   genres: state.config.genres,
-  selectedNumSongs: state.config.selctedNumSongs,
-  selectedNumArtists: state.config.selectedNumArtists
+  numSongs: state.config.numSongs,
+  numArtists: state.config.numArtists
 })
 
 const mapDispatchToProps = dispatch => ({
   loadGenres: () => dispatch(loadGenres()),
   selectGenre: genre => dispatch(selectGenre(genre)),
-  selectNumSongs: selectedNumSongs =>
-    dispatch(selectNumSongs(selectedNumSongs)),
-  selectNumArtists: selectedNumArtists =>
-    dispatch(selectNumArtists(selectedNumArtists))
+  selectNumSongs: numSongs => dispatch(selectNumSongs(numSongs)),
+  selectNumArtists: numArtists => dispatch(selectNumArtists(numArtists))
 })
 
 export default connect(

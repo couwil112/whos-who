@@ -9,8 +9,8 @@ export const SELECT_NUM_ARTISTS = 'SELECT_NUM_ARTISTS'
 
 const initialState = {
   genres: [],
-  selectedNumSongs: 1,
-  selectedNumArtists: 2,
+  numSongs: 1,
+  numArtists: 2,
   errorLoadingGenres: false
 }
 
@@ -36,12 +36,12 @@ export default function reducer (state = initialState, action) {
     case SELECT_NUM_SONGS:
       return {
         ...state,
-        selectedNumSongs: action.payload.selectedNumSongs
+        selectedNumSongs: action.payload.numSongs
       }
     case SELECT_NUM_ARTISTS:
       return {
         ...state,
-        selectedNumArtists: action.payload.selectedNumArtists
+        selectedNumArtists: action.payload.numArtists
       }
     default:
       return state
@@ -55,17 +55,17 @@ export const selectGenre = genre => ({
   }
 })
 
-export const selectNumSongs = selectedNumSongs => ({
+export const selectNumSongs = numSongs => ({
   type: SELECT_NUM_SONGS,
   payload: {
-    selectedNumSongs
+    numSongs
   }
 })
 
-export const selectNumArtists = selectedNumArtists => ({
+export const selectNumArtists = numArtists => ({
   type: SELECT_NUM_ARTISTS,
   payload: {
-    selectedNumArtists
+    numArtists
   }
 })
 
