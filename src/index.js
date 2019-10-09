@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 
 import configureStore from './configureStore'
 import { fetchAndStoreAccessToken } from './services/auth'
-import App from './containers/App'
+import App from './App'
 
 // Fetch and store the Spotify access token in localStorage
 fetchAndStoreAccessToken()
