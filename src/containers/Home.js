@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
+// import Header from '../components/Header'
 import {
   loadGenres,
   selectGenre,
@@ -23,6 +24,7 @@ class Home extends React.Component {
 
     return (
       <div>
+        {/* <Header name="Who's Who" /> */}
         Pick a Genre
         <br />
         <select onChange={event => this.props.selectGenre(event.target.value)}>
@@ -98,7 +100,7 @@ class Home extends React.Component {
         </label>
         <br />
         <br />
-        <button value='playGame' onClick=''>
+        <button value='playGame' onClick={event => console.log('Play Game')}>
           Play Game
         </button>
       </div>
@@ -115,9 +117,7 @@ Home.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  genres: state.config.genres,
-  numSongs: state.config.numSongs,
-  numArtists: state.config.numArtists
+  genres: state.config.genres
 })
 
 const mapDispatchToProps = dispatch => ({
