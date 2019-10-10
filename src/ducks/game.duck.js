@@ -1,32 +1,46 @@
 import { fetchArtists, fetchSongs } from '../services/api'
 // import chooseRandom from '../utils/chooseRandom'
 
-export const LOAD_ARTISTS_SONGS_BEGIN = 'LOAD_ARTISTS_SONGS_BEGIN'
-export const LOAD_ARTISTS_SONGS_FAILURE = 'LOAD_ARTISTS_SONGS_FAILURE'
-export const LOAD_ARTISTS_SONGS_DONE = 'LOAD_ARTISTS_SONGS_DONE'
+export const LOAD_ARTISTS_BEGIN = 'LOAD_ARTISTS_BEGIN'
+export const LOAD_ARTISTS_FAILURE = 'LOAD_ARTISTS_FAILURE'
+export const LOAD_ARTISTS_DONE = 'LOAD_ARTISTS_DONE'
+export const LOAD_SONGS_BEGIN = 'LOAD_SONGS_BEGIN'
+export const LOAD_SONGS_FAILURE = 'LOAD_SONGS_FAILURE'
+export const LOAD_SONGS_DONE = 'LOAD_SONGS_DONE'
 export const SELECT_ARTIST = 'SELECT_ARTIST'
 export const SELECT_SONG = 'PLAY_SONG'
 
 const initialState = () => ({
   artists: [],
   songs: [],
-  errorLoadingArtistsSongs: false
+  errorLoadingArtists: false,
+  errorLoadingSongs: false
 })
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
-    case LOAD_ARTISTS_SONGS_DONE:
+    case LOAD_ARTISTS_DONE:
       return {
         ...state,
-        errorLoadingArtistsSongs: false,
-        artists: action.payload.artists,
+        errorLoadingArtists: false,
+        artists: action.payload.artists
+      }
+    case LOAD_ARTISTS_FAILURE:
+      return {
+        ...state,
+        errorLoadingArtists: true,
+        artists: initialState.artists
+      }
+    case LOAD_SONGS_DONE:
+      return {
+        ...state,
+        errorLoadingSongs: false,
         songs: action.payload.songs
       }
-    case LOAD_ARTISTS_SONGS_FAILURE:
+    case LOAD_SONGS_FAILURE:
       return {
         ...state,
-        errorLoadingArtistsSongs: true,
-        artists: initialState.artists,
+        errorLoadingSongs: true,
         songs: initialState.songs
       }
     case SELECT_ARTIST:
@@ -63,20 +77,34 @@ export const selectSong = song => ({
   }
 })
 
-const loadArtistsSongsBegin = () => ({
-  type: LOAD_ARTISTS_SONGS_BEGIN
+const loadArtistsBegin = () => ({
+  type: LOAD_ARTISTS_BEGIN
 })
 
-const loadArtistsSongsDone = (artists, songs) => ({
-  type: LOAD_ARTISTS_SONGS_DONE,
+const loadArtistsDone = artists => ({
+  type: LOAD_ARTISTS_DONE,
   payload: {
-    artists,
+    artists
+  }
+})
+
+const loadArtistsFailed = () => ({
+  type: LOAD_ARTISTS_FAILURE
+})
+
+const loadSongsBegin = () => ({
+  type: LOAD_SONGS_BEGIN
+})
+
+const loadSongsDone = songs => ({
+  type: LOAD_SONGS_DONE,
+  payload: {
     songs
   }
 })
 
-const loadArtistsSongsFailed = () => ({
-  type: LOAD_ARTISTS_SONGS_FAILURE
+const loadSongsFailed = () => ({
+  type: LOAD_SONGS_FAILURE
 })
 
 const artist = (id, name, isCorrect) => ({
@@ -115,25 +143,32 @@ const artistsArr = items => {
 
 const randomOffset = Math.floor(Math.random() * 1000)
 
-export const loadArtistsSongs = () => dispatch => {
-  dispatch(loadArtistsSongsBegin())
-  Promise.all([
-    fetchArtists('"anime"', randomOffset, 1),
-    fetchSongs('246dkjvS1zLTtiykXe5h60')
-  ])
-    .then(([{ artists }, songs]) => {
+export const loadArtists = () => dispatch => {
+  dispatch(loadArtistsBegin())
+  fetchArtists('"anime"', randomOffset, 1)
+    .then(({ artists }) => {
       console.log(artists.total)
       console.log(artists)
+
       let { items } = artists
-      let { tracks } = songs
       // console.log(artistsArr(items))
       // console.log(items[1].id)
       // console.log(items[1].name)
+      return dispatch(loadArtistsDone(artistsArr(items)))
+    })
+    .catch(err => dispatch(loadArtistsFailed(err)))
+}
+
+export const loadSongs = () => dispatch => {
+  dispatch(loadSongsBegin())
+  fetchSongs('246dkjvS1zLTtiykXe5h60')
+    .then(songs => {
+      let { tracks } = songs
       // console.log(tracks)
       // console.log(tracks[1])
       // console.log(tracks[1].preview_url)
       // findPreviewUrl(tracks)
-      return dispatch(loadArtistsSongsDone(artistsArr(items), tracks))
+      return dispatch(loadSongsDone(tracks))
     })
-    .catch(err => dispatch(loadArtistsSongsFailed(err)))
+    .catch(err => dispatch(loadSongsFailed(err)))
 }
