@@ -80,10 +80,15 @@ const loadArtistsSongsFailed = () => ({
 
 export const loadArtistsSongs = () => dispatch => {
   dispatch(loadArtistsSongsBegin())
-  Promise.all([fetchArtists(), fetchSongs()])
+  Promise.all([
+    fetchArtists('"pop"', 51, 4),
+    fetchSongs('246dkjvS1zLTtiykXe5h60')
+  ])
     .then(([{ artists }, songs]) => {
       let { items } = artists
       let { tracks } = songs
+      console.log(items)
+      console.log(tracks)
       return dispatch(loadArtistsSongsDone(items, tracks))
     })
     .catch(err => dispatch(loadArtistsSongsFailed(err)))

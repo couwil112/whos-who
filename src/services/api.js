@@ -11,26 +11,19 @@ export function fetchGenres () {
   })
 }
 
-export function fetchArtists () {
+export function fetchArtists (selectedGenre, randomOffset, numArtists) {
+  let endpointString = `search?q=genre:${selectedGenre}&type=artist&offset=${randomOffset}&limit=${numArtists}`
   return fetchFromSpotify({
-    endpoint: 'search?q=genre:%22pop%22&type=artist&limit=50'
-    // params: {
-    // randomize offset
-    // }
+    endpoint: endpointString
   })
 }
 
-export function fetchSongs () {
+export function fetchSongs (artistId) {
+  let endpointString = `artists/${artistId}/top-tracks?country=US`
   return fetchFromSpotify({
-    endpoint: 'artists/246dkjvS1zLTtiykXe5h60/top-tracks?country=US'
-    // params:
+    endpoint: endpointString
   })
 }
-
-// export function fetchArtistsSongs () {
-//   // return fetchArtists()
-//   return fetchSongs()
-// }
 
 export function fetchFromSpotify ({ endpoint, params }) {
   const spotifyToken = getAccessTokenFromLocalStorage()
