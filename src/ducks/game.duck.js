@@ -1,4 +1,5 @@
 import { fetchArtists, fetchSongs } from '../services/api'
+// import chooseRandom from '../utils/chooseRandom'
 
 export const LOAD_ARTISTS_SONGS_BEGIN = 'LOAD_ARTISTS_SONGS_BEGIN'
 export const LOAD_ARTISTS_SONGS_FAILURE = 'LOAD_ARTISTS_SONGS_FAILURE'
@@ -78,18 +79,61 @@ const loadArtistsSongsFailed = () => ({
   type: LOAD_ARTISTS_SONGS_FAILURE
 })
 
+const artist = (id, name, isCorrect) => ({
+  id: id,
+  name: name,
+  isCorrect: isCorrect
+})
+
+const artistsArr = items => {
+  let arr = []
+  for (let item of items) {
+    arr.push(artist(item.id, item.name, false))
+  }
+  return arr
+}
+
+// const songs = (tracks) => {
+//   let arr = []
+//   for (let track of tracks) {
+
+//     arr.push(track.preview_url)
+//   }
+//   return arr
+// }
+
+// const findPreviewUrl = songs => {
+//   console.log('Finding Preview URLs')
+//   for (let song of songs) {
+//     if (song.preview_url) {
+//       console.log(song.preview_url)
+//     } else {
+//       console.log('no preview url')
+//     }
+//   }
+// }
+
+const randomOffset = Math.floor(Math.random() * 1000)
+
 export const loadArtistsSongs = () => dispatch => {
   dispatch(loadArtistsSongsBegin())
   Promise.all([
-    fetchArtists('"pop"', 51, 4),
+    fetchArtists('"anime"', randomOffset, 1),
     fetchSongs('246dkjvS1zLTtiykXe5h60')
   ])
     .then(([{ artists }, songs]) => {
+      console.log(artists.total)
+      console.log(artists)
       let { items } = artists
       let { tracks } = songs
-      console.log(items)
-      console.log(tracks)
-      return dispatch(loadArtistsSongsDone(items, tracks))
+      // console.log(artistsArr(items))
+      // console.log(items[1].id)
+      // console.log(items[1].name)
+      // console.log(tracks)
+      // console.log(tracks[1])
+      // console.log(tracks[1].preview_url)
+      // findPreviewUrl(tracks)
+      return dispatch(loadArtistsSongsDone(artistsArr(items), tracks))
     })
     .catch(err => dispatch(loadArtistsSongsFailed(err)))
 }
