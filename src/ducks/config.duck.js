@@ -11,6 +11,7 @@ const initialState = {
   genres: [],
   numSongs: 1,
   numArtists: 2,
+  genre: 'acoustic',
   errorLoadingGenres: false
 }
 
@@ -31,17 +32,17 @@ export default function reducer (state = initialState, action) {
     case SELECT_GENRE:
       return {
         ...state,
-        selectedGenre: action.payload.genre
+        genre: action.payload.genre
       }
     case SELECT_NUM_SONGS:
       return {
         ...state,
-        selectedNumSongs: action.payload.numSongs
+        numSongs: action.payload.numSongs
       }
     case SELECT_NUM_ARTISTS:
       return {
         ...state,
-        selectedNumArtists: action.payload.numArtists
+        numArtists: action.payload.numArtists
       }
     default:
       return state

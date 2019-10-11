@@ -8,10 +8,12 @@ export const LOAD_SONGS_BEGIN = 'LOAD_SONGS_BEGIN'
 export const LOAD_SONGS_FAILURE = 'LOAD_SONGS_FAILURE'
 export const LOAD_SONGS_DONE = 'LOAD_SONGS_DONE'
 export const SELECT_ARTIST = 'SELECT_ARTIST'
+export const RANDOMIZE_CORRECT_ARTIST = 'RANDOMIZE_CORRECT_ARTIST'
 
 const initialState = {
   artists: [],
   songs: [],
+  correctArtist: '',
   errorLoadingArtists: false,
   errorLoadingSongs: false
 }
@@ -47,6 +49,11 @@ export default function reducer (state = initialState, action) {
         ...state,
         selectedArtist: action.payload.artist
       }
+    case RANDOMIZE_CORRECT_ARTIST:
+      return {
+        ...state,
+        correctArtist: action.payload.artist
+      }
     default:
       return state
   }
@@ -56,6 +63,13 @@ export const selectArtist = artist => ({
   type: SELECT_ARTIST,
   payload: {
     artist
+  }
+})
+
+export const randomizeCorrectArtist = correctArtist => ({
+  type: RANDOMIZE_CORRECT_ARTIST,
+  payload: {
+    correctArtist
   }
 })
 
@@ -88,6 +102,13 @@ const loadSongsDone = songs => ({
 const loadSongsFailed = () => ({
   type: LOAD_SONGS_FAILURE
 })
+
+// const chooseRandomArtist = artists => {
+//   let arr = chooseRandom(artists, 1)
+//   let artist = arr[1]
+//   artist.isCorrect = true
+//   return artist
+// }
 
 const artist = (id, name, isCorrect) => ({
   id: id,
@@ -128,26 +149,20 @@ const songsArr = tracks => {
 
 const randomOffset = Math.floor(Math.random() * 1000)
 
-export const loadArtists = numArtists => dispatch => {
+export const loadArtists = (genre, numArtists) => dispatch => {
   dispatch(loadArtistsBegin())
-  fetchArtists('"pop"', randomOffset, numArtists)
+  fetchArtists(`"${genre}"`, randomOffset, numArtists)
     .then(({ artists }) => {
-      //   console.log(artists.total)
-      //   console.log(artists)
-
       let { items } = artists
-      // console.log(artistsArr(items))
-      // console.log(items[1].id)
-      // console.log(items[1].name)
       return dispatch(loadArtistsDone(artistsArr(items)))
     })
     .catch(err => dispatch(loadArtistsFailed(err)))
 }
 
-export const loadSongs = numSongs => dispatch => {
+export const loadSongs = (artist, numSongs) => dispatch => {
   dispatch(loadSongsBegin())
   //   fetchSongs('246dkjvS1zLTtiykXe5h60')
-  fetchSongs('3utxjLheHaVEd9bPjQRsy8')
+  fetchSongs(artist)
     .then(songs => {
       let { tracks } = songs
       // console.log(`numSongs: ${numSongs}`)

@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 
-// import Header from '../components/Header'
 import {
   loadGenres,
   selectGenre,
@@ -10,10 +9,18 @@ import {
   selectNumArtists
 } from '../ducks/config.duck'
 
+import { loadArtists, loadSongs } from '../ducks/game.duck'
+
 class Home extends React.Component {
   componentDidMount () {
     this.props.loadGenres()
   }
+
+  // onClick = () => {
+  //   const { genre, numSongs, numArtists, loadArtists, loadSongs } = this.props
+  //   Promise.all([loadArtists(genre, numArtists), loadSongs(numSongs)])
+  //   this.props.history.push('/game')
+  // }
 
   render () {
     const genres = this.props.genres.map(genre => (
@@ -24,7 +31,6 @@ class Home extends React.Component {
 
     return (
       <div>
-        {/* <Header name="Who's Who" /> */}
         Pick a Genre
         <br />
         <select onChange={event => this.props.selectGenre(event.target.value)}>
@@ -39,8 +45,8 @@ class Home extends React.Component {
             name='numSongChoices'
             type='radio'
             value='1'
-            onChange={event => this.props.selectNumSongs(event.target.value)}
-            defaultChecked={this.props.selectNumSongs('1')}
+            onChange={event => this.props.selectNumSongs(1)}
+            defaultChecked
           />
           1 song
         </label>
@@ -50,7 +56,7 @@ class Home extends React.Component {
             name='numSongChoices'
             type='radio'
             value='2'
-            onChange={event => this.props.selectNumSongs(event.target.value)}
+            onChange={event => this.props.selectNumSongs(2)}
           />
           2 songs
         </label>
@@ -60,7 +66,7 @@ class Home extends React.Component {
             name='numSongChoices'
             type='radio'
             value='3'
-            onChange={event => this.props.selectNumSongs(event.target.value)}
+            onChange={event => this.props.selectNumSongs(3)}
           />
           3 songs
         </label>
@@ -73,8 +79,8 @@ class Home extends React.Component {
             name='numArtistChoices'
             type='radio'
             value='2'
-            onChange={event => this.props.selectNumArtists(event.target.value)}
-            defaultChecked={this.props.selectNumArtists('2')}
+            onChange={event => this.props.selectNumArtists(2)}
+            defaultChecked
           />
           2 artists
         </label>
@@ -84,7 +90,7 @@ class Home extends React.Component {
             name='numArtistChoices'
             type='radio'
             value='3'
-            onChange={event => this.props.selectNumArtists(event.target.value)}
+            onChange={event => this.props.selectNumArtists(3)}
           />
           3 artists
         </label>
@@ -94,13 +100,13 @@ class Home extends React.Component {
             name='numArtistChoices'
             type='radio'
             value='4'
-            onChange={event => this.props.selectNumArtists(event.target.value)}
+            onChange={event => this.props.selectNumArtists(4)}
           />
           4 artists
         </label>
         <br />
         <br />
-        <button value='playGame' onClick={event => console.log('Play Game')}>
+        <button value='playGame' onClick={this.onClick}>
           Play Game
         </button>
       </div>
@@ -112,19 +118,29 @@ Home.propTypes = {
   loadGenres: PropTypes.func.isRequired,
   selectGenre: PropTypes.func.isRequired,
   genres: PropTypes.array,
+  // genre: PropTypes.string,
+  // numArtists: PropTypes.number,
+  // numSongs: PropTypes.number,
   selectNumSongs: PropTypes.func.isRequired,
   selectNumArtists: PropTypes.func.isRequired
+  // loadArtists: PropTypes.func.isRequired,
+  // loadSongs: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
-  genres: state.config.genres
+  genres: state.config.genres,
+  genre: state.config.genre,
+  numArtists: state.config.numArtists,
+  numSongs: state.config.numSongs
 })
 
 const mapDispatchToProps = dispatch => ({
   loadGenres: () => dispatch(loadGenres()),
   selectGenre: genre => dispatch(selectGenre(genre)),
   selectNumSongs: numSongs => dispatch(selectNumSongs(numSongs)),
-  selectNumArtists: numArtists => dispatch(selectNumArtists(numArtists))
+  selectNumArtists: numArtists => dispatch(selectNumArtists(numArtists)),
+  loadArtists: (genre, numArtists) => dispatch(loadArtists(genre, numArtists)),
+  loadSongs: numSongs => dispatch(loadSongs(numSongs))
 })
 
 export default connect(
