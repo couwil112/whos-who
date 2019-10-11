@@ -12,7 +12,7 @@ import {
 // import Header from '../components/Header'
 class Game extends React.Component {
   componentDidMount () {
-    Promise.all([this.props.loadArtists(), this.props.loadSongs()])
+    Promise.all([this.props.loadArtists(2), this.props.loadSongs(1)])
   }
 
   render () {
@@ -41,8 +41,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  loadArtists: () => dispatch(loadArtists()),
-  loadSongs: () => dispatch(loadSongs()),
+  loadArtists: numArtists => dispatch(loadArtists(numArtists)),
+  loadSongs: numSongs => dispatch(loadSongs(numSongs)),
   selectArtist: artist => dispatch(selectArtist(artist)),
   selectSong: song => dispatch(selectSong(song))
 })

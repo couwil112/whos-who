@@ -13,7 +13,13 @@ export const chooseRandom = (array = [], numItems) => {
     } while (randomIndices.indexOf(num) >= 0)
     randomIndices.push(num)
   }
-  return array.filter(
-    (item, index) => array.indexOf(item) === randomIndices[index]
-  )
+  return filter(array, randomIndices)
+}
+
+const filter = (arr, indices) => {
+  let newArr = []
+  for (let index of indices) {
+    newArr.push(arr[index])
+  }
+  return newArr
 }
