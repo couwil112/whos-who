@@ -8,14 +8,13 @@ export const LOAD_SONGS_BEGIN = 'LOAD_SONGS_BEGIN'
 export const LOAD_SONGS_FAILURE = 'LOAD_SONGS_FAILURE'
 export const LOAD_SONGS_DONE = 'LOAD_SONGS_DONE'
 export const SELECT_ARTIST = 'SELECT_ARTIST'
-export const SELECT_SONG = 'PLAY_SONG'
 
-const initialState = () => ({
+const initialState = {
   artists: [],
   songs: [],
   errorLoadingArtists: false,
   errorLoadingSongs: false
-})
+}
 
 export default function reducer (state = initialState, action) {
   switch (action.type) {
@@ -48,11 +47,6 @@ export default function reducer (state = initialState, action) {
         ...state,
         selectedArtist: action.payload.artist
       }
-    case SELECT_SONG:
-      return {
-        ...state,
-        selectedSong: action.payload.song
-      }
     default:
       return state
   }
@@ -62,18 +56,6 @@ export const selectArtist = artist => ({
   type: SELECT_ARTIST,
   payload: {
     artist
-    // artist: {
-    //   id,
-    //   name,
-    //   isCorrect
-    // }
-  }
-})
-
-export const selectSong = song => ({
-  type: SELECT_SONG,
-  payload: {
-    song
   }
 })
 
@@ -124,21 +106,25 @@ const artistsArr = items => {
 const songsArr = tracks => {
   let arr = []
   for (let track of tracks) {
-    arr.push(track.preview_url)
+    let song = {
+      id: track.id,
+      preview: track.preview_url
+    }
+    arr.push(song)
   }
   return arr
 }
 
-const findPreviewUrl = songs => {
-  console.log('Finding Preview URLs')
-  for (let song of songs) {
-    if (song.preview_url) {
-      console.log(song.preview_url)
-    } else {
-      console.log('no preview url')
-    }
-  }
-}
+// const findPreviewUrl = songs => {
+//   console.log('Finding Preview URLs')
+//   for (let song of songs) {
+//     if (song.preview_url) {
+//       console.log(song.preview_url)
+//     } else {
+//       console.log('no preview url')
+//     }
+//   }
+// }
 
 const randomOffset = Math.floor(Math.random() * 1000)
 
@@ -164,15 +150,15 @@ export const loadSongs = numSongs => dispatch => {
   fetchSongs('3utxjLheHaVEd9bPjQRsy8')
     .then(songs => {
       let { tracks } = songs
-      console.log(`numSongs: ${numSongs}`)
+      // console.log(`numSongs: ${numSongs}`)
       //   console.log(tracks)
       // console.log(tracks[1])
       // console.log(tracks[1].preview_url)
-      findPreviewUrl(tracks)
+      // findPreviewUrl(tracks)
       let trackArr = songsArr(tracks)
-      console.log(trackArr)
+      // console.log(trackArr)
       let arr = chooseRandom(trackArr, numSongs)
-      console.log(`After chooseRandom ${arr}`)
+      // console.log(`After chooseRandom ${arr}`)
       return dispatch(loadSongsDone(arr))
     })
     .catch(err => dispatch(loadSongsFailed(err)))
