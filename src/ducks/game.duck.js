@@ -103,13 +103,6 @@ const loadSongsFailed = () => ({
   type: LOAD_SONGS_FAILURE
 })
 
-// const chooseRandomArtist = artists => {
-//   let arr = chooseRandom(artists, 1)
-//   let artist = arr[1]
-//   artist.isCorrect = true
-//   return artist
-// }
-
 const artist = (id, name, isCorrect) => ({
   id: id,
   name: name,
@@ -136,17 +129,6 @@ const songsArr = tracks => {
   return arr
 }
 
-// const findPreviewUrl = songs => {
-//   console.log('Finding Preview URLs')
-//   for (let song of songs) {
-//     if (song.preview_url) {
-//       console.log(song.preview_url)
-//     } else {
-//       console.log('no preview url')
-//     }
-//   }
-// }
-
 const randomOffset = Math.floor(Math.random() * 1000)
 
 export const loadArtists = (genre, numArtists) => dispatch => {
@@ -159,21 +141,13 @@ export const loadArtists = (genre, numArtists) => dispatch => {
     .catch(err => dispatch(loadArtistsFailed(err)))
 }
 
-export const loadSongs = (artist, numSongs) => dispatch => {
+export const loadSongs = numSongs => dispatch => {
   dispatch(loadSongsBegin())
-  //   fetchSongs('246dkjvS1zLTtiykXe5h60')
-  fetchSongs(artist)
+  fetchSongs('246dkjvS1zLTtiykXe5h60')
     .then(songs => {
       let { tracks } = songs
-      // console.log(`numSongs: ${numSongs}`)
-      //   console.log(tracks)
-      // console.log(tracks[1])
-      // console.log(tracks[1].preview_url)
-      // findPreviewUrl(tracks)
       let trackArr = songsArr(tracks)
-      // console.log(trackArr)
       let arr = chooseRandom(trackArr, numSongs)
-      // console.log(`After chooseRandom ${arr}`)
       return dispatch(loadSongsDone(arr))
     })
     .catch(err => dispatch(loadSongsFailed(err)))

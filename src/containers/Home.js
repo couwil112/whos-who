@@ -16,11 +16,11 @@ class Home extends React.Component {
     this.props.loadGenres()
   }
 
-  // onClick = () => {
-  //   const { genre, numSongs, numArtists, loadArtists, loadSongs } = this.props
-  //   Promise.all([loadArtists(genre, numArtists), loadSongs(numSongs)])
-  //   this.props.history.push('/game')
-  // }
+  onClick = () => {
+    const { genre, numSongs, numArtists, loadArtists, loadSongs } = this.props
+    Promise.all([loadArtists(genre, numArtists), loadSongs(numSongs)])
+    this.props.history.push('/game')
+  }
 
   render () {
     const genres = this.props.genres.map(genre => (
@@ -118,13 +118,13 @@ Home.propTypes = {
   loadGenres: PropTypes.func.isRequired,
   selectGenre: PropTypes.func.isRequired,
   genres: PropTypes.array,
-  // genre: PropTypes.string,
-  // numArtists: PropTypes.number,
-  // numSongs: PropTypes.number,
+  genre: PropTypes.string,
+  numArtists: PropTypes.number,
+  numSongs: PropTypes.number,
   selectNumSongs: PropTypes.func.isRequired,
-  selectNumArtists: PropTypes.func.isRequired
-  // loadArtists: PropTypes.func.isRequired,
-  // loadSongs: PropTypes.func.isRequired
+  selectNumArtists: PropTypes.func.isRequired,
+  loadArtists: PropTypes.func.isRequired,
+  loadSongs: PropTypes.func.isRequired
 }
 
 const mapStateToProps = state => ({
