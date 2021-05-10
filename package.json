@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "history": "latest",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.21",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-play-button": "^0.1.1",
