@@ -36,7 +36,7 @@
     "redux-devtools-extension": "^2.13.5",
     "style-loader": "^0.23.0",
     "webpack": "^4.17.3",
-    "webpack-cli": "^3.1.0",
+    "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.8.2"
   },
   "dependencies": {
